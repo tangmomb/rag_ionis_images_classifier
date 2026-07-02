@@ -50,11 +50,11 @@ src/
     04_cluster_extracted_frames.py
     youtube_pipeline.py
   model_training/
-    train.py
-    predict_video.py
+    01_train.py
+    02_predict_video.py
+    03_export_review_frames.py
     embeddings.py
     temporal_smoothing.py
-    export_review_frames.py
 ```
 
 ## Workflow YouTube
@@ -76,8 +76,8 @@ outputs/video_urls.txt
 data/raw_videos/
 outputs/extracted_frames/
 outputs/clusters/
-data/frames/initial_sort_via_script/footage/
-data/frames/initial_sort_via_script/graphic/
+data/frames/01_initial_sort_via_script/footage/
+data/frames/01_initial_sort_via_script/graphic/
 ```
 
 Options utiles:
@@ -168,8 +168,8 @@ Chaque cluster contient aussi un `contact_sheet.jpg` et un `manifest.json`.
 Ensuite, par defaut, le premier tri reste binaire et deplace les frames sources vers:
 
 ```text
-data/frames/initial_sort_via_script/footage/
-data/frames/initial_sort_via_script/graphic/
+data/frames/01_initial_sort_via_script/footage/
+data/frames/01_initial_sort_via_script/graphic/
 ```
 
 Les clusters `mixed`, donc les choix difficiles du tri automatique, sont envoyes dans `footage` par defaut. La classe `mixture` est reservee au tri corrige manuel dans `corrected_sort`.
@@ -187,41 +187,31 @@ python src/data_prep/04_cluster_extracted_frames.py --no-apply-labels
 Verifiez ensuite le premier tri et copiez/deplacez les images corrigees dans les dossiers d'entrainement:
 
 ```text
-data/frames/corrected_sort/footage/
-data/frames/corrected_sort/graphic/
-data/frames/corrected_sort/mixture/
+data/frames/03_corrected_sort/footage/
+data/frames/03_corrected_sort/graphic/
+data/frames/03_corrected_sort/mixture/
 ```
 
 ### 7. Entrainer
 
-Par defaut, `train.py` lit le jeu corrige `data/frames/corrected_sort`.
+Par defaut, `01_train.py` lit le jeu corrige `data/frames/03_corrected_sort`.
 
 ```powershell
-python src/model_training/train.py --data data/frames/corrected_sort --model-out models/frame_filter.joblib --crop-bottom 0.20
-```
-
-## Extraction video optionnelle hors YouTube
-
-Le projet inclut aussi un extracteur OpenCV generique si vous avez deja des fichiers video locaux.
-
-```powershell
-python src/model_training/extract_frames.py --videos chemin/vers/videos --out outputs/extracted_frames --fps 1
-```
-
-Options utiles:
-
-```powershell
-python src/model_training/extract_frames.py --videos chemin/vers/videos --out data/frames/initial_sort_via_script --fps 1 --sample-every-n 2 --class-dir footage
+python src/model_training/01_train.py --data data/frames/03_corrected_sort --model-out models/frame_filter.joblib --crop-bottom 0.20
 ```
 
 ## Details entrainement
 
 Le bas de l'image est ignore par defaut a `20%` pour reduire l'effet des sous-titres.
-Le dossier d'entrainement par defaut est `data/frames/corrected_sort`.
-La validation est separee par video par defaut: toutes les frames d'une meme video restent soit dans train, soit dans validation. Cela evite des scores trop optimistes quand beaucoup d'images consecutives se ressemblent.
+Le dossier d'entrainement par defaut est `data/frames/03_corrected_sort`.
+Le script construit maintenant un split `train / val / test` par video par defaut: toutes les frames d'une meme video restent dans un seul split. Cela evite des scores trop optimistes quand beaucoup d'images consecutives se ressemblent.
+Par defaut: `80% train`, `10% val`, `10% test`. Le seuil automatique est choisi sur `val`, puis les metriques finales sont affichees sur `test`.
+Au lancement, si `--classifier` n'est pas fourni, le script demande si vous voulez entrainer `logreg` ou `mlp`.
+Si `--model-out` n'est pas fourni, le modele est enregistre automatiquement dans `models/` avec un nom horodate.
+Un fichier log `.log` avec les sorties console de l'entrainement est aussi cree a cote du modele.
 
 ```powershell
-python src/model_training/train.py --data data/frames/corrected_sort --model-out models/frame_filter.joblib --crop-bottom 0.20
+python src/model_training/01_train.py --data data/frames/03_corrected_sort --model-out models/frame_filter.joblib --crop-bottom 0.20
 ```
 
 Le modele sauvegarde contient:
@@ -236,25 +226,25 @@ Le modele sauvegarde contient:
 Le classifieur par defaut est `LogisticRegression` avec ponderation de classe pour favoriser le rappel de `graphic` et `mixture`. Un MLP PyTorch est aussi disponible:
 
 ```powershell
-python src/model_training/train.py --data data/frames/corrected_sort --classifier mlp --epochs 30 --batch-size 32
+python src/model_training/01_train.py --data data/frames/03_corrected_sort --classifier mlp --epochs 30 --batch-size 32
 ```
 
 Pour un test rapide non representatif, vous pouvez revenir a un split aleatoire par image:
 
 ```powershell
-python src/model_training/train.py --split-mode image
+python src/model_training/01_train.py --split-mode image
 ```
 
 ### Predire sur une video
 
 ```powershell
-python src/model_training/predict_video.py --video input.mp4 --model models/frame_filter.joblib --out outputs/predictions.json --fps 2 --crop-bottom 0.20
+python src/model_training/02_predict_video.py --video input.mp4 --model models/frame_filter.joblib --out outputs/predictions.json --fps 2 --crop-bottom 0.20
 ```
 
 Options utiles:
 
 ```powershell
-python src/model_training/predict_video.py --video input.mp4 --model models/frame_filter.joblib --out outputs/predictions.json --fps 2 --threshold 0.45 --smoothing-window 9 --min-segment-duration 1.0 --merge-gap 0.75 --device cuda
+python src/model_training/02_predict_video.py --video input.mp4 --model models/frame_filter.joblib --out outputs/predictions.json --fps 2 --threshold 0.45 --smoothing-window 9 --min-segment-duration 1.0 --merge-gap 0.75 --device cuda
 ```
 
 Le JSON contient les probabilites `footage`, `graphic` et `mixture` par frame, les predictions lissees, `segments_filter` pour `graphic + mixture`, et `segments_by_class`.
@@ -264,19 +254,19 @@ Le JSON contient les probabilites `footage`, `graphic` et `mixture` par frame, l
 Pendant l'inference, vous pouvez exporter les frames incertaines dans `outputs/review/`:
 
 ```powershell
-python src/model_training/predict_video.py --video input.mp4 --model models/frame_filter.joblib --out outputs/predictions.json --export-review --review-dir outputs/review --uncertain-margin 0.10
+python src/model_training/02_predict_video.py --video input.mp4 --model models/frame_filter.joblib --out outputs/predictions.json --export-review --review-dir outputs/review --uncertain-margin 0.10
 ```
 
 Ou apres coup depuis un fichier de predictions:
 
 ```powershell
-python src/model_training/export_review_frames.py --predictions outputs/predictions.json --out outputs/review --top-k 100
+python src/model_training/03_export_review_frames.py --predictions outputs/predictions.json --out outputs/review --top-k 100
 ```
 
 Si un fichier de labels est disponible, le script peut aussi exporter les faux positifs et faux negatifs:
 
 ```powershell
-python src/model_training/export_review_frames.py --predictions outputs/predictions.json --labels labels.json --out outputs/review
+python src/model_training/03_export_review_frames.py --predictions outputs/predictions.json --labels labels.json --out outputs/review
 ```
 
 Formats de labels acceptes:

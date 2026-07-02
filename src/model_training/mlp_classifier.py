@@ -4,9 +4,10 @@ from typing import Any
 
 import numpy as np
 import torch
+from sklearn.base import BaseEstimator, ClassifierMixin
 
 
-class TorchMLPClassifier:
+class TorchMLPClassifier(ClassifierMixin, BaseEstimator):
     def __init__(
         self,
         input_dim: int | None = None,

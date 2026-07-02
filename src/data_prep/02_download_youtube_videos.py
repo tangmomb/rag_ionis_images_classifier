@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import random
+import time
 from pathlib import Path
 
 import yt_dlp
@@ -12,6 +14,8 @@ from youtube_pipeline import DEFAULT_RAW_VIDEO_DIR, DEFAULT_VIDEO_LIST, existing
 
 DEFAULT_FORMAT = "bestvideo[height=720]+bestaudio/best[height=720]/bestvideo[height<=720]+bestaudio/best[height<=720]/best"
 DEFAULT_MERGE_FORMAT = "mp4"
+DEFAULT_SLEEP_MIN = 5.0
+DEFAULT_SLEEP_MAX = 10.0
 
 
 def download_video(
@@ -36,6 +40,7 @@ def download_video(
         "outtmpl": str(video_dir / "%(id)s.%(ext)s"),
         "ffmpeg_location": str(ffmpeg_exe()),
         "js_runtimes": {"node": {}},
+        "remote_components": ["ejs:github"],
         "quiet": False,
         "noplaylist": True,
     }
@@ -59,6 +64,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--raw-video-dir", default=str(DEFAULT_RAW_VIDEO_DIR), help="Parent output directory for downloaded videos.")
     parser.add_argument("--format", default=DEFAULT_FORMAT, help="yt-dlp format selector.")
     parser.add_argument("--force", action="store_true", help="Download again even if a video file already exists.")
+    parser.add_argument("--sleep-min", type=float, default=DEFAULT_SLEEP_MIN, help="Minimum random delay between video downloads in seconds.")
+    parser.add_argument("--sleep-max", type=float, default=DEFAULT_SLEEP_MAX, help="Maximum random delay between video downloads in seconds.")
     parser.add_argument("--dry-run", action="store_true", help="List videos without downloading.")
     return parser.parse_args()
 
@@ -66,6 +73,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     load_dotenv(override=True)
     args = parse_args()
+    if args.sleep_min < 0 or args.sleep_max < 0:
+        raise ValueError("--sleep-min and --sleep-max must be >= 0")
+    if args.sleep_min > args.sleep_max:
+        raise ValueError("--sleep-min must be <= --sleep-max")
+
     videos = [load_video_info_from_url(args.video_url)] if args.video_url else load_video_list(args.video_list, limit=args.limit)
     if not videos:
         print(f"Aucune video trouvee dans {args.video_list}.")
@@ -83,7 +95,11 @@ def main() -> None:
 
     downloaded_count = 0
     failed: list[str] = []
-    for video in videos:
+    for index, video in enumerate(videos):
+        if index > 0 and args.sleep_max > 0:
+            delay = random.uniform(args.sleep_min, args.sleep_max)
+            print(f"[sleep] waiting {delay:.1f}s before next download")
+            time.sleep(delay)
         try:
             download_video(video, download_dir, force=args.force, ytdlp_format=args.format)
             downloaded_count += 1

@@ -89,7 +89,12 @@ class FrozenBackboneEmbedder:
             assert self.clip_processor is not None
             assert self.clip_model is not None
             clip_inputs = self.clip_processor(images=list(images), return_tensors="pt").to(self.device)
-            clip_vec = self.clip_model.get_image_features(**clip_inputs)
+            clip_outputs = self.clip_model.vision_model(pixel_values=clip_inputs["pixel_values"])
+            if hasattr(clip_outputs, "pooler_output") and clip_outputs.pooler_output is not None:
+                clip_vec = clip_outputs.pooler_output
+            else:
+                clip_vec = clip_outputs.last_hidden_state[:, 0, :]
+            clip_vec = self.clip_model.visual_projection(clip_vec)
             clip_vec = torch.nn.functional.normalize(clip_vec, dim=1)
             vectors.append(clip_vec.detach().cpu().numpy().astype(np.float32))
 

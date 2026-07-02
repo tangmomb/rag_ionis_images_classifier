@@ -22,7 +22,7 @@ from utils import IMAGE_EXTENSIONS, ensure_dir, write_json
 
 DEFAULT_INPUT = Path("outputs/extracted_frames")
 DEFAULT_OUTPUT = Path("outputs/clusters")
-DEFAULT_LABELS_DIR = Path("data/frames/initial_sort_via_script")
+DEFAULT_LABELS_DIR = Path("data/frames/01_initial_sort_via_script")
 FEATURE_KEYS = [
     "gray_std",
     "color_std",

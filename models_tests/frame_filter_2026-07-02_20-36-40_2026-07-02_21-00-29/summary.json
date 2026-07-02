@@ -1,0 +1,121 @@
+{
+  "model": "E:\\cooking\\rag_ionis_images_classifier\\models\\frame_filter_2026-07-02_20-36-40.joblib",
+  "video_list": "E:\\cooking\\rag_ionis_images_classifier\\lot_1.txt",
+  "output_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29",
+  "success_count": 15,
+  "failure_count": 4,
+  "results": [
+    {
+      "video_id": "utffm9REFuI",
+      "youtube_url": "https://www.youtube.com/watch?v=utffm9REFuI",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\utffm9REFuI_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\utffm9REFuI_classified_frames"
+    },
+    {
+      "video_id": "NhT0E_9bHsc",
+      "youtube_url": "https://www.youtube.com/watch?v=NhT0E_9bHsc",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\NhT0E_9bHsc_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\NhT0E_9bHsc_classified_frames"
+    },
+    {
+      "video_id": "lkHHsIWmlPM",
+      "youtube_url": "https://www.youtube.com/watch?v=lkHHsIWmlPM",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\lkHHsIWmlPM_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\lkHHsIWmlPM_classified_frames"
+    },
+    {
+      "video_id": "ZRXy0v1WaQI",
+      "youtube_url": "https://www.youtube.com/watch?v=ZRXy0v1WaQI",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\ZRXy0v1WaQI_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\ZRXy0v1WaQI_classified_frames"
+    },
+    {
+      "video_id": "H5FNHcNViFI",
+      "youtube_url": "https://www.youtube.com/watch?v=H5FNHcNViFI",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\H5FNHcNViFI_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\H5FNHcNViFI_classified_frames"
+    },
+    {
+      "video_id": "WHEb4HXIn4g",
+      "youtube_url": "https://www.youtube.com/watch?v=WHEb4HXIn4g",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\WHEb4HXIn4g_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\WHEb4HXIn4g_classified_frames"
+    },
+    {
+      "video_id": "WT3npsN-MNs",
+      "youtube_url": "https://www.youtube.com/watch?v=WT3npsN-MNs",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\WT3npsN-MNs_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\WT3npsN-MNs_classified_frames"
+    },
+    {
+      "video_id": "-bIUB_idBuU",
+      "youtube_url": "https://www.youtube.com/watch?v=-bIUB_idBuU",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\-bIUB_idBuU_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\-bIUB_idBuU_classified_frames"
+    },
+    {
+      "video_id": "oh9_blIcrTA",
+      "youtube_url": "https://www.youtube.com/watch?v=oh9_blIcrTA",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\oh9_blIcrTA_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\oh9_blIcrTA_classified_frames"
+    },
+    {
+      "video_id": "sUknlt6gOMc",
+      "youtube_url": "https://www.youtube.com/watch?v=sUknlt6gOMc",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\sUknlt6gOMc_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\sUknlt6gOMc_classified_frames"
+    },
+    {
+      "video_id": "agCDTU_z6OU",
+      "youtube_url": "https://www.youtube.com/watch?v=agCDTU_z6OU",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\agCDTU_z6OU_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\agCDTU_z6OU_classified_frames"
+    },
+    {
+      "video_id": "_r2Eq9x7o7o",
+      "youtube_url": "https://www.youtube.com/watch?v=_r2Eq9x7o7o",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\_r2Eq9x7o7o_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\_r2Eq9x7o7o_classified_frames"
+    },
+    {
+      "video_id": "8sYeZgVcseI",
+      "youtube_url": "https://www.youtube.com/watch?v=8sYeZgVcseI",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\8sYeZgVcseI_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\8sYeZgVcseI_classified_frames"
+    },
+    {
+      "video_id": "LJ-W6BjSJRo",
+      "youtube_url": "https://www.youtube.com/watch?v=LJ-W6BjSJRo",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\LJ-W6BjSJRo_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\LJ-W6BjSJRo_classified_frames"
+    },
+    {
+      "video_id": "6g45_N4ovOI",
+      "youtube_url": "https://www.youtube.com/watch?v=6g45_N4ovOI",
+      "predictions_json": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\6g45_N4ovOI_classified_frames\\predictions.json",
+      "classified_frames_dir": "E:\\cooking\\rag_ionis_images_classifier\\models_tests\\frame_filter_2026-07-02_20-36-40_2026-07-02_21-00-29\\6g45_N4ovOI_classified_frames"
+    }
+  ],
+  "failures": [
+    {
+      "video_id": "BOoB-_oeXeU",
+      "youtube_url": "https://www.youtube.com/watch?v=BOoB-_oeXeU",
+      "error": "Command '['downloads\\\\bin\\\\ffmpeg.exe', '-y', '-loglevel', 'error', '-ss', '32.024', '-i', 'E:\\\\cooking\\\\rag_ionis_images_classifier\\\\outputs\\\\cache\\\\downloads\\\\BOoB-_oeXeU.mp4', '-frames:v', '1', '-q:v', '3', 'outputs\\\\cache\\\\frames\\\\BOoB-_oeXeU\\\\BOoB-_oeXeU_t000032.033_f00000961.jpg']' returned non-zero exit status 4294967274."
+    },
+    {
+      "video_id": "x0YZLicvFeA",
+      "youtube_url": "https://www.youtube.com/watch?v=x0YZLicvFeA",
+      "error": "yt-dlp failed to download the video: \u001b[0;31mERROR:\u001b[0m unable to download video data: HTTP Error 403: Forbidden"
+    },
+    {
+      "video_id": "T95KU1-EyX4",
+      "youtube_url": "https://www.youtube.com/watch?v=T95KU1-EyX4",
+      "error": "Command '['downloads\\\\bin\\\\ffmpeg.exe', '-y', '-loglevel', 'error', '-ss', '134.025', '-i', 'E:\\\\cooking\\\\rag_ionis_images_classifier\\\\outputs\\\\cache\\\\downloads\\\\T95KU1-EyX4.mp4', '-frames:v', '1', '-q:v', '3', 'outputs\\\\cache\\\\frames\\\\T95KU1-EyX4\\\\T95KU1-EyX4_t000134.033_f00004021.jpg']' returned non-zero exit status 4294967274."
+    },
+    {
+      "video_id": "MsxTsc2uAvw",
+      "youtube_url": "https://www.youtube.com/watch?v=MsxTsc2uAvw",
+      "error": "yt-dlp failed to download the video: \u001b[0;31mERROR:\u001b[0m unable to download video data: HTTP Error 403: Forbidden"
+    }
+  ]
+}

@@ -1,0 +1,404 @@
+Training log: models\frame_filter_2026-07-02_17-38-50.log
+Using device: cuda
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|##########| 223/223 [00:00<00:00, 7746.32it/s]
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|##########| 398/398 [00:00<00:00, 34978.90it/s]
+Embedding frames: 0batch [00:00, ?batch/s]Embedding frames: 0batch [00:00, ?batch/s]
+Split mode: video | train images=279 | val images=32 | test images=25
+Train class counts: {'footage': 170, 'graphic': 100, 'mixture': 9}
+Val class counts:   {'footage': 19, 'graphic': 11, 'mixture': 2}
+Test class counts:  {'footage': 10, 'graphic': 14, 'mixture': 1}
+Train selected images (279):
+  data\frames\corrected_sort\footage\028IgIPcAFk__00_20.jpg
+  data\frames\corrected_sort\footage\028IgIPcAFk__00_40.jpg
+  data\frames\corrected_sort\footage\028IgIPcAFk__01_00.jpg
+  data\frames\corrected_sort\footage\028IgIPcAFk__01_20.jpg
+  data\frames\corrected_sort\footage\028IgIPcAFk__01_40.jpg
+  data\frames\corrected_sort\footage\1ebMH7PQ6pA__00_20.jpg
+  data\frames\corrected_sort\footage\1ebMH7PQ6pA__00_40.jpg
+  data\frames\corrected_sort\footage\1ebMH7PQ6pA__01_00.jpg
+  data\frames\corrected_sort\footage\1ebMH7PQ6pA__01_20.jpg
+  data\frames\corrected_sort\footage\1ebMH7PQ6pA__01_40.jpg
+  data\frames\corrected_sort\footage\1ebMH7PQ6pA__02_20.jpg
+  data\frames\corrected_sort\footage\2IKM6l-NUbQ__02_14.jpg
+  data\frames\corrected_sort\footage\2IKM6l-NUbQ__02_34.jpg
+  data\frames\corrected_sort\footage\2IKM6l-NUbQ__02_54.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__00_07.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__00_22.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__00_35.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__00_40.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__00_47.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__00_52.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__01_03.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__01_09.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__01_16.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__01_32.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__01_51.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__01_58.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__02_03.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__02_21.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__02_30.jpg
+  data\frames\corrected_sort\footage\_r2Eq9x7o7o__02_32.jpg
+  data\frames\corrected_sort\footage\bKaDS5OyeZ4__44_06.jpg
+  data\frames\corrected_sort\footage\bKaDS5OyeZ4__48_54.jpg
+  data\frames\corrected_sort\footage\bKaDS5OyeZ4__55_51.jpg
+  data\frames\corrected_sort\footage\c8E1bXfoAaM__01_05.jpg
+  data\frames\corrected_sort\footage\c8E1bXfoAaM__01_12.jpg
+  data\frames\corrected_sort\footage\c8E1bXfoAaM__01_17.jpg
+  data\frames\corrected_sort\footage\cA7pDXilf8c__00_20.jpg
+  data\frames\corrected_sort\footage\cA7pDXilf8c__01_00.jpg
+  data\frames\corrected_sort\footage\cA7pDXilf8c__01_20.jpg
+  data\frames\corrected_sort\footage\cA7pDXilf8c__01_40.jpg
+  data\frames\corrected_sort\footage\cA7pDXilf8c__02_00.jpg
+  data\frames\corrected_sort\footage\dodY2PILghE__00_15.jpg
+  data\frames\corrected_sort\footage\DtorSrnKVjM__39_14.jpg
+  data\frames\corrected_sort\footage\DtorSrnKVjM__42_34.jpg
+  data\frames\corrected_sort\footage\DtorSrnKVjM__45_54.jpg
+  data\frames\corrected_sort\footage\F5jbdP89cU8__36_59.jpg
+  data\frames\corrected_sort\footage\F5jbdP89cU8__40_19.jpg
+  data\frames\corrected_sort\footage\F5jbdP89cU8__43_55.jpg
+  data\frames\corrected_sort\footage\fDTtN0rGHU0__01_27.jpg
+  data\frames\corrected_sort\footage\fDTtN0rGHU0__01_32.jpg
+  data\frames\corrected_sort\footage\fDTtN0rGHU0__01_37.jpg
+  data\frames\corrected_sort\footage\g6kCUiVFKYg__01_21.jpg
+  data\frames\corrected_sort\footage\g6kCUiVFKYg__01_26.jpg
+  data\frames\corrected_sort\footage\g6kCUiVFKYg__01_31.jpg
+  data\frames\corrected_sort\footage\G8-18RpsNzg__02_52.jpg
+  data\frames\corrected_sort\footage\G8-18RpsNzg__03_12.jpg
+  data\frames\corrected_sort\footage\G8-18RpsNzg__03_32.jpg
+  data\frames\corrected_sort\footage\H9UK2x3PjeQ__00_47.jpg
+  data\frames\corrected_sort\footage\H9UK2x3PjeQ__01_07.jpg
+  data\frames\corrected_sort\footage\H9UK2x3PjeQ__01_29.jpg
+  data\frames\corrected_sort\footage\H9UK2x3PjeQ__01_49.jpg
+  data\frames\corrected_sort\footage\hl6aNpbsRvI__00_30.jpg
+  data\frames\corrected_sort\footage\hl6aNpbsRvI__00_40.jpg
+  data\frames\corrected_sort\footage\hl6aNpbsRvI__00_45.jpg
+  data\frames\corrected_sort\footage\i2exsfiYAvU__00_38.jpg
+  data\frames\corrected_sort\footage\i2exsfiYAvU__00_43.jpg
+  data\frames\corrected_sort\footage\i2exsfiYAvU__00_50.jpg
+  data\frames\corrected_sort\footage\ixCzMVh2OmM__02_00.jpg
+  data\frames\corrected_sort\footage\ixCzMVh2OmM__02_20.jpg
+  data\frames\corrected_sort\footage\ixCzMVh2OmM__02_40.jpg
+  data\frames\corrected_sort\footage\J21W7S2GC-E__01_17.jpg
+  data\frames\corrected_sort\footage\J21W7S2GC-E__01_25.jpg
+  data\frames\corrected_sort\footage\J21W7S2GC-E__01_30.jpg
+  data\frames\corrected_sort\footage\Jhg5agODCTA__00_18.jpg
+  data\frames\corrected_sort\footage\Jhg5agODCTA__00_23.jpg
+  data\frames\corrected_sort\footage\Jhg5agODCTA__00_28.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_05.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_10.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_11.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_18.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_23.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_30.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_31.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_39.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_44.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_47.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_52.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__00_57.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_02.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_10.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_12.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_18.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_23.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_29.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_34.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_37.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_43.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_49.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_54.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__01_59.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__02_03.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__02_10.jpg
+  data\frames\corrected_sort\footage\MFa3-1BnoDM__02_15.jpg
+  data\frames\corrected_sort\footage\mK_VQVYxUD0__00_00.jpg
+  data\frames\corrected_sort\footage\mK_VQVYxUD0__00_05.jpg
+  data\frames\corrected_sort\footage\mK_VQVYxUD0__00_10.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_04.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_09.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_14.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_19.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_34.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_39.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_44.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_49.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_54.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__00_59.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__01_04.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__01_09.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__01_14.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__01_19.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__01_24.jpg
+  data\frames\corrected_sort\footage\MsxTsc2uAvw__01_29.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__00_15.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__00_20.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__01_13.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__02_03.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__02_08.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__02_13.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__02_45.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__04_01.jpg
+  data\frames\corrected_sort\footage\NJbfABrxcdY__07_21.jpg
+  data\frames\corrected_sort\footage\r1G2GwKqVG4__01_00.jpg
+  data\frames\corrected_sort\footage\r1G2GwKqVG4__01_05.jpg
+  data\frames\corrected_sort\footage\r1G2GwKqVG4__01_10.jpg
+  data\frames\corrected_sort\footage\r1G2GwKqVG4__01_15.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__00_20.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__00_40.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__01_00.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__01_20.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__01_40.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__02_00.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__02_20.jpg
+  data\frames\corrected_sort\footage\r1sk-_8TlJI__02_40.jpg
+  data\frames\corrected_sort\footage\SU_FRERE-OI__00_37.jpg
+  data\frames\corrected_sort\footage\SU_FRERE-OI__00_48.jpg
+  data\frames\corrected_sort\footage\SU_FRERE-OI__00_53.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_05.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_10.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_15.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_18.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_25.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_27.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_32.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_37.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_42.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_47.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_52.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__00_57.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_01.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_07.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_15.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_20.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_23.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_30.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_35.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_40.jpg
+  data\frames\corrected_sort\footage\UcPqkIZfsgM__01_45.jpg
+  data\frames\corrected_sort\footage\X7dsQwjsI8I__02_27.jpg
+  data\frames\corrected_sort\footage\X7dsQwjsI8I__02_47.jpg
+  data\frames\corrected_sort\footage\X7dsQwjsI8I__03_10.jpg
+  data\frames\corrected_sort\graphic\028IgIPcAFk__00_00.jpg
+  data\frames\corrected_sort\graphic\1ebMH7PQ6pA__00_00.jpg
+  data\frames\corrected_sort\graphic\1ebMH7PQ6pA__03_20.jpg
+  data\frames\corrected_sort\graphic\2IKM6l-NUbQ__00_10.jpg
+  data\frames\corrected_sort\graphic\2IKM6l-NUbQ__00_15.jpg
+  data\frames\corrected_sort\graphic\2IKM6l-NUbQ__01_22.jpg
+  data\frames\corrected_sort\graphic\2IKM6l-NUbQ__02_59.jpg
+  data\frames\corrected_sort\graphic\9VjULYQkg_g__00_00.jpg
+  data\frames\corrected_sort\graphic\9VjULYQkg_g__00_05.jpg
+  data\frames\corrected_sort\graphic\9VjULYQkg_g__00_10.jpg
+  data\frames\corrected_sort\graphic\9VjULYQkg_g__00_20.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__00_00.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__05_30.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__12_19.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__18_48.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__25_08.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__36_47.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__43_18.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__53_20.jpg
+  data\frames\corrected_sort\graphic\bKaDS5OyeZ4__58_43.jpg
+  data\frames\corrected_sort\graphic\c8E1bXfoAaM__00_05.jpg
+  data\frames\corrected_sort\graphic\c8E1bXfoAaM__00_18.jpg
+  data\frames\corrected_sort\graphic\c8E1bXfoAaM__01_10.jpg
+  data\frames\corrected_sort\graphic\c8E1bXfoAaM__01_21.jpg
+  data\frames\corrected_sort\graphic\cA7pDXilf8c__00_00.jpg
+  data\frames\corrected_sort\graphic\dodY2PILghE__00_00.jpg
+  data\frames\corrected_sort\graphic\dodY2PILghE__00_05.jpg
+  data\frames\corrected_sort\graphic\dodY2PILghE__00_10.jpg
+  data\frames\corrected_sort\graphic\dodY2PILghE__00_20.jpg
+  data\frames\corrected_sort\graphic\DtorSrnKVjM__00_00.jpg
+  data\frames\corrected_sort\graphic\DtorSrnKVjM__07_07.jpg
+  data\frames\corrected_sort\graphic\DtorSrnKVjM__12_42.jpg
+  data\frames\corrected_sort\graphic\DtorSrnKVjM__22_59.jpg
+  data\frames\corrected_sort\graphic\DtorSrnKVjM__27_27.jpg
+  data\frames\corrected_sort\graphic\DtorSrnKVjM__30_47.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__00_00.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__00_04.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__06_21.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__13_11.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__18_54.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__22_35.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__28_39.jpg
+  data\frames\corrected_sort\graphic\F5jbdP89cU8__32_18.jpg
+  data\frames\corrected_sort\graphic\fDTtN0rGHU0__00_03.jpg
+  data\frames\corrected_sort\graphic\fDTtN0rGHU0__00_45.jpg
+  data\frames\corrected_sort\graphic\fDTtN0rGHU0__01_07.jpg
+  data\frames\corrected_sort\graphic\fDTtN0rGHU0__01_41.jpg
+  data\frames\corrected_sort\graphic\g6kCUiVFKYg__00_01.jpg
+  data\frames\corrected_sort\graphic\g6kCUiVFKYg__00_14.jpg
+  data\frames\corrected_sort\graphic\g6kCUiVFKYg__00_49.jpg
+  data\frames\corrected_sort\graphic\g6kCUiVFKYg__01_15.jpg
+  data\frames\corrected_sort\graphic\g6kCUiVFKYg__01_39.jpg
+  data\frames\corrected_sort\graphic\G8-18RpsNzg__00_27.jpg
+  data\frames\corrected_sort\graphic\G8-18RpsNzg__00_47.jpg
+  data\frames\corrected_sort\graphic\G8-18RpsNzg__02_30.jpg
+  data\frames\corrected_sort\graphic\G8-18RpsNzg__03_36.jpg
+  data\frames\corrected_sort\graphic\H9UK2x3PjeQ__00_19.jpg
+  data\frames\corrected_sort\graphic\H9UK2x3PjeQ__00_43.jpg
+  data\frames\corrected_sort\graphic\H9UK2x3PjeQ__01_57.jpg
+  data\frames\corrected_sort\graphic\hl6aNpbsRvI__00_15.jpg
+  data\frames\corrected_sort\graphic\hl6aNpbsRvI__00_35.jpg
+  data\frames\corrected_sort\graphic\hl6aNpbsRvI__00_50.jpg
+  data\frames\corrected_sort\graphic\hl6aNpbsRvI__00_55.jpg
+  data\frames\corrected_sort\graphic\i2exsfiYAvU__00_06.jpg
+  data\frames\corrected_sort\graphic\i2exsfiYAvU__00_33.jpg
+  data\frames\corrected_sort\graphic\i2exsfiYAvU__00_55.jpg
+  data\frames\corrected_sort\graphic\i2exsfiYAvU__01_00.jpg
+  data\frames\corrected_sort\graphic\J21W7S2GC-E__00_03.jpg
+  data\frames\corrected_sort\graphic\J21W7S2GC-E__00_17.jpg
+  data\frames\corrected_sort\graphic\J21W7S2GC-E__01_06.jpg
+  data\frames\corrected_sort\graphic\J21W7S2GC-E__01_34.jpg
+  data\frames\corrected_sort\graphic\J21W7S2GC-E__01_39.jpg
+  data\frames\corrected_sort\graphic\Jhg5agODCTA__00_03.jpg
+  data\frames\corrected_sort\graphic\Jhg5agODCTA__00_34.jpg
+  data\frames\corrected_sort\graphic\MFa3-1BnoDM__00_00.jpg
+  data\frames\corrected_sort\graphic\MFa3-1BnoDM__02_17.jpg
+  data\frames\corrected_sort\graphic\MFa3-1BnoDM__02_22.jpg
+  data\frames\corrected_sort\graphic\mK_VQVYxUD0__00_20.jpg
+  data\frames\corrected_sort\graphic\mK_VQVYxUD0__01_10.jpg
+  data\frames\corrected_sort\graphic\MsxTsc2uAvw__00_00.jpg
+  data\frames\corrected_sort\graphic\MsxTsc2uAvw__01_34.jpg
+  data\frames\corrected_sort\graphic\MsxTsc2uAvw__01_39.jpg
+  data\frames\corrected_sort\graphic\MsxTsc2uAvw__01_44.jpg
+  data\frames\corrected_sort\graphic\NJbfABrxcdY__00_00.jpg
+  data\frames\corrected_sort\graphic\r1G2GwKqVG4__00_05.jpg
+  data\frames\corrected_sort\graphic\r1G2GwKqVG4__00_30.jpg
+  data\frames\corrected_sort\graphic\r1G2GwKqVG4__00_55.jpg
+  data\frames\corrected_sort\graphic\r1sk-_8TlJI__00_00.jpg
+  data\frames\corrected_sort\graphic\SU_FRERE-OI__00_57.jpg
+  data\frames\corrected_sort\graphic\SU_FRERE-OI__01_04.jpg
+  data\frames\corrected_sort\graphic\UcPqkIZfsgM__01_50.jpg
+  data\frames\corrected_sort\graphic\UcPqkIZfsgM__01_55.jpg
+  data\frames\corrected_sort\graphic\uu53BaiHznw__00_00.jpg
+  data\frames\corrected_sort\graphic\uu53BaiHznw__00_05.jpg
+  data\frames\corrected_sort\graphic\uu53BaiHznw__00_10.jpg
+  data\frames\corrected_sort\graphic\uu53BaiHznw__00_20.jpg
+  data\frames\corrected_sort\graphic\X7dsQwjsI8I__00_09.jpg
+  data\frames\corrected_sort\graphic\X7dsQwjsI8I__01_09.jpg
+  data\frames\corrected_sort\graphic\X7dsQwjsI8I__03_26.jpg
+  data\frames\corrected_sort\graphic\X7dsQwjsI8I__03_31.jpg
+  data\frames\corrected_sort\mixture\9VjULYQkg_g__00_15.jpg
+  data\frames\corrected_sort\mixture\9VjULYQkg_g__00_25.jpg
+  data\frames\corrected_sort\mixture\9VjULYQkg_g__00_30.jpg
+  data\frames\corrected_sort\mixture\fDTtN0rGHU0__00_00.jpg
+  data\frames\corrected_sort\mixture\hl6aNpbsRvI__00_00.jpg
+  data\frames\corrected_sort\mixture\r1G2GwKqVG4__00_00.jpg
+  data\frames\corrected_sort\mixture\r1G2GwKqVG4__01_20.jpg
+  data\frames\corrected_sort\mixture\SU_FRERE-OI__00_00.jpg
+  data\frames\corrected_sort\mixture\uu53BaiHznw__00_15.jpg
+Val selected images (32):
+  data\frames\corrected_sort\footage\agCDTU_z6OU__00_18.jpg
+  data\frames\corrected_sort\footage\agCDTU_z6OU__00_23.jpg
+  data\frames\corrected_sort\footage\agCDTU_z6OU__00_29.jpg
+  data\frames\corrected_sort\footage\agCDTU_z6OU__00_33.jpg
+  data\frames\corrected_sort\footage\agCDTU_z6OU__00_38.jpg
+  data\frames\corrected_sort\footage\agCDTU_z6OU__00_43.jpg
+  data\frames\corrected_sort\footage\agCDTU_z6OU__00_48.jpg
+  data\frames\corrected_sort\footage\BOoB-_oeXeU__00_15.jpg
+  data\frames\corrected_sort\footage\HPlY59SWEp8__00_20.jpg
+  data\frames\corrected_sort\footage\HPlY59SWEp8__00_40.jpg
+  data\frames\corrected_sort\footage\HPlY59SWEp8__01_00.jpg
+  data\frames\corrected_sort\footage\HPlY59SWEp8__01_20.jpg
+  data\frames\corrected_sort\footage\HPlY59SWEp8__01_40.jpg
+  data\frames\corrected_sort\footage\HPlY59SWEp8__02_00.jpg
+  data\frames\corrected_sort\footage\HPlY59SWEp8__02_20.jpg
+  data\frames\corrected_sort\footage\kpncvOUnaQc__00_20.jpg
+  data\frames\corrected_sort\footage\kpncvOUnaQc__00_40.jpg
+  data\frames\corrected_sort\footage\kpncvOUnaQc__01_20.jpg
+  data\frames\corrected_sort\footage\kpncvOUnaQc__02_20.jpg
+  data\frames\corrected_sort\graphic\agCDTU_z6OU__00_00.jpg
+  data\frames\corrected_sort\graphic\agCDTU_z6OU__00_05.jpg
+  data\frames\corrected_sort\graphic\agCDTU_z6OU__00_53.jpg
+  data\frames\corrected_sort\graphic\agCDTU_z6OU__00_58.jpg
+  data\frames\corrected_sort\graphic\BOoB-_oeXeU__00_00.jpg
+  data\frames\corrected_sort\graphic\BOoB-_oeXeU__00_05.jpg
+  data\frames\corrected_sort\graphic\BOoB-_oeXeU__00_10.jpg
+  data\frames\corrected_sort\graphic\BOoB-_oeXeU__00_20.jpg
+  data\frames\corrected_sort\graphic\HPlY59SWEp8__00_00.jpg
+  data\frames\corrected_sort\graphic\kpncvOUnaQc__01_40.jpg
+  data\frames\corrected_sort\graphic\kpncvOUnaQc__02_00.jpg
+  data\frames\corrected_sort\mixture\agCDTU_z6OU__00_10.jpg
+  data\frames\corrected_sort\mixture\kpncvOUnaQc__01_00.jpg
+Test selected images (25):
+  data\frames\corrected_sort\footage\B2TUSI5vGgE__01_06.jpg
+  data\frames\corrected_sort\footage\B2TUSI5vGgE__01_13.jpg
+  data\frames\corrected_sort\footage\B2TUSI5vGgE__01_18.jpg
+  data\frames\corrected_sort\footage\KQxlfhLpq6c__00_15.jpg
+  data\frames\corrected_sort\footage\oznMpAWHr5I__00_57.jpg
+  data\frames\corrected_sort\footage\oznMpAWHr5I__01_02.jpg
+  data\frames\corrected_sort\footage\oznMpAWHr5I__01_07.jpg
+  data\frames\corrected_sort\footage\tl4-qslyCdc__01_05.jpg
+  data\frames\corrected_sort\footage\tl4-qslyCdc__01_25.jpg
+  data\frames\corrected_sort\footage\tl4-qslyCdc__01_48.jpg
+  data\frames\corrected_sort\graphic\B2TUSI5vGgE__00_13.jpg
+  data\frames\corrected_sort\graphic\B2TUSI5vGgE__00_30.jpg
+  data\frames\corrected_sort\graphic\B2TUSI5vGgE__00_49.jpg
+  data\frames\corrected_sort\graphic\B2TUSI5vGgE__01_24.jpg
+  data\frames\corrected_sort\graphic\KQxlfhLpq6c__00_00.jpg
+  data\frames\corrected_sort\graphic\KQxlfhLpq6c__00_05.jpg
+  data\frames\corrected_sort\graphic\KQxlfhLpq6c__00_10.jpg
+  data\frames\corrected_sort\graphic\KQxlfhLpq6c__00_20.jpg
+  data\frames\corrected_sort\graphic\oznMpAWHr5I__00_03.jpg
+  data\frames\corrected_sort\graphic\oznMpAWHr5I__01_11.jpg
+  data\frames\corrected_sort\graphic\tl4-qslyCdc__00_30.jpg
+  data\frames\corrected_sort\graphic\tl4-qslyCdc__01_29.jpg
+  data\frames\corrected_sort\graphic\tl4-qslyCdc__02_05.jpg
+  data\frames\corrected_sort\graphic\tl4-qslyCdc__02_10.jpg
+  data\frames\corrected_sort\mixture\oznMpAWHr5I__00_00.jpg
+Train videos=30 | val videos=4 | test videos=4
+
+Validation metrics
+Threshold: 0.500
+Accuracy:         0.9062
+Precision macro:  0.6046
+Recall macro:     0.6364
+F1 macro:         0.6197
+Precision filter: 1.0000
+Recall filter:    0.8462
+F1 filter:        0.9167
+Confusion matrix rows=true cols=pred, classes=['footage', 'graphic', 'mixture']:
+[[19  0  0]
+ [ 1 10  0]
+ [ 1  1  0]]
+Filter confusion matrix rows=true cols=pred, classes=[keep, filter]:
+[[19  0]
+ [ 2 11]]
+              precision    recall  f1-score   support
+
+     footage       0.90      1.00      0.95        19
+     graphic       0.91      0.91      0.91        11
+     mixture       0.00      0.00      0.00         2
+
+    accuracy                           0.91        32
+   macro avg       0.60      0.64      0.62        32
+weighted avg       0.85      0.91      0.88        32
+
+
+Test metrics
+Threshold: 0.500
+Accuracy:         1.0000
+Precision macro:  1.0000
+Recall macro:     1.0000
+F1 macro:         1.0000
+Precision filter: 0.9375
+Recall filter:    1.0000
+F1 filter:        0.9677
+Confusion matrix rows=true cols=pred, classes=['footage', 'graphic', 'mixture']:
+[[10  0  0]
+ [ 0 14  0]
+ [ 0  0  1]]
+Filter confusion matrix rows=true cols=pred, classes=[keep, filter]:
+[[ 9  1]
+ [ 0 15]]
+              precision    recall  f1-score   support
+
+     footage       1.00      1.00      1.00        10
+     graphic       1.00      1.00      1.00        14
+     mixture       1.00      1.00      1.00         1
+
+    accuracy                           1.00        25
+   macro avg       1.00      1.00      1.00        25
+weighted avg       1.00      1.00      1.00        25
+
+Saved model to models\frame_filter_2026-07-02_17-38-50.joblib

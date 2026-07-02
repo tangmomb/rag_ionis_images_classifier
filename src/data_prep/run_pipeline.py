@@ -10,7 +10,8 @@ from youtube_pipeline import DEFAULT_CHANNEL, DEFAULT_EXTRACTED_FRAMES_DIR, DEFA
 
 
 DEFAULT_CLUSTERS_OUT = Path("outputs/clusters")
-DEFAULT_LABELS_DIR = Path("data/frames/initial_sort_via_script")
+DEFAULT_LABELS_DIR = Path("data/frames/01_initial_sort_via_script")
+DEFAULT_INITIAL_SORT_SAMPLE_DIR = Path("data/frames/02_initial_sort_sample")
 
 
 def run_step(name: str, command: list[str], dry_run: bool = False) -> None:
@@ -81,6 +82,7 @@ def clean_pipeline_outputs(args: argparse.Namespace) -> None:
     clear_directory(Path(args.labels_dir) / "footage", dry_run=args.dry_run)
     clear_directory(Path(args.labels_dir) / "graphic", dry_run=args.dry_run)
     remove_path(Path(args.labels_dir) / "mixture", dry_run=args.dry_run)
+    clear_directory(args.initial_sort_sample_dir, dry_run=args.dry_run)
 
 
 def parse_args() -> argparse.Namespace:
@@ -99,6 +101,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--frames-dir", default=str(DEFAULT_EXTRACTED_FRAMES_DIR), help="Temporary extracted frames directory before sorting.")
     parser.add_argument("--clusters-out", default=str(DEFAULT_CLUSTERS_OUT))
     parser.add_argument("--labels-dir", default=str(DEFAULT_LABELS_DIR), help="Directory containing footage/ and graphic/.")
+    parser.add_argument("--initial-sort-sample-dir", default=str(DEFAULT_INITIAL_SORT_SAMPLE_DIR), help="Directory containing the reduced review sample.")
 
     parser.add_argument("--fps", type=float, default=1.0, help="Frame extraction FPS. Default: 1.")
     parser.add_argument("--clusters", type=int, default=None, help="Number of visual clusters per video/group.")
@@ -116,7 +119,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-download", action="store_true")
     parser.add_argument("--skip-extract", action="store_true")
     parser.add_argument("--skip-cluster", action="store_true")
-    parser.add_argument("--no-clean", action="store_true", help="Do not delete previous video list, downloads, extracted frames, clusters, footage and graphic.")
+    parser.add_argument("--skip-sample", action="store_true")
+    parser.add_argument("--no-clean", action="store_true", help="Do not delete previous video list, downloads, extracted frames, clusters, initial sort labels, or initial sort sample.")
     parser.add_argument("--dry-run", action="store_true", help="Print commands without running them.")
     return parser.parse_args()
 
@@ -255,6 +259,17 @@ def main() -> None:
         if args.no_apply_labels:
             command.append("--no-apply-labels")
         run_step("04 cluster extracted frames", command, dry_run=args.dry_run)
+
+    if not args.skip_sample:
+        command = [
+            python,
+            script_path("05_sample_initial_sort.py"),
+            "--input",
+            args.labels_dir,
+            "--out",
+            args.initial_sort_sample_dir,
+        ]
+        run_step("05 sample initial sort", command, dry_run=args.dry_run)
 
     print("\nData preparation pipeline complete.")
 
