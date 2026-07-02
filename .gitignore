@@ -8,6 +8,7 @@ outputs/cache/
 outputs/review/
 outputs/clusters/
 outputs/extracted_frames/
+models_tests/
 models/*.joblib
 outputs/video_urls.txt
 data/raw_videos/*
