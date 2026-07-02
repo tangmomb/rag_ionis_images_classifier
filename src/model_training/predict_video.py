@@ -17,6 +17,11 @@ from temporal_smoothing import build_filter_segments
 from utils import choose_device, ensure_dir, read_frame_rgb, save_rgb_frame, stable_hash, write_json
 
 
+DEFAULT_LABEL_MAPPING = {"footage": 0, "graphic": 1, "mixture": 2}
+DEFAULT_CLASS_NAMES = ["footage", "graphic", "mixture"]
+DEFAULT_FILTER_CLASS_NAMES = ["graphic", "mixture"]
+
+
 def extract_prediction_frames(
     video: str | Path,
     out_dir: str | Path,
@@ -72,6 +77,33 @@ def load_model_payload(path: str | Path) -> dict[str, object]:
     return payload
 
 
+def class_names_from_payload(payload: dict[str, object]) -> list[str]:
+    raw_class_names = payload.get("class_names")
+    if isinstance(raw_class_names, list) and all(isinstance(item, str) for item in raw_class_names):
+        return [str(item) for item in raw_class_names]
+
+    raw_mapping = payload.get("label_mapping", DEFAULT_LABEL_MAPPING)
+    if isinstance(raw_mapping, dict):
+        pairs = sorted((int(value), str(key)) for key, value in raw_mapping.items())
+        return [name for _, name in pairs]
+    return DEFAULT_CLASS_NAMES
+
+
+def align_probabilities(classifier: object, proba: np.ndarray, class_names: list[str]) -> np.ndarray:
+    classes = getattr(classifier, "classes_", None)
+    if classes is None:
+        return proba
+    class_ids = [int(value) for value in np.asarray(classes).tolist()]
+    if class_ids == list(range(len(class_names))):
+        return proba
+
+    aligned = np.zeros((proba.shape[0], len(class_names)), dtype=np.float32)
+    for source_index, class_id in enumerate(class_ids):
+        if 0 <= class_id < len(class_names):
+            aligned[:, class_id] = proba[:, source_index]
+    return aligned
+
+
 def predict(args: argparse.Namespace) -> None:
     model_payload = load_model_payload(args.model)
     model_backbones = model_payload.get("backbones", {})
@@ -82,6 +114,13 @@ def predict(args: argparse.Namespace) -> None:
     clip_model = str(model_backbones.get("clip", DEFAULT_CLIP_MODEL))
     crop_bottom = float(args.crop_bottom if args.crop_bottom is not None else model_payload.get("crop_bottom", 0.20))
     threshold = float(args.threshold if args.threshold is not None else model_payload.get("threshold_recommended", 0.5))
+    class_names = class_names_from_payload(model_payload)
+    filter_class_names = model_payload.get("filter_class_names", DEFAULT_FILTER_CLASS_NAMES)
+    if not isinstance(filter_class_names, list):
+        filter_class_names = DEFAULT_FILTER_CLASS_NAMES
+    filter_indices = [class_names.index(str(name)) for name in filter_class_names if str(name) in class_names]
+    if not filter_indices and "graphic" in class_names:
+        filter_indices = [class_names.index("graphic")]
 
     video_path = Path(args.video)
     run_id = stable_hash([str(video_path.resolve()), video_path.stat().st_size, video_path.stat().st_mtime_ns, args.fps, args.sample_every_n])[:16]
@@ -106,12 +145,13 @@ def predict(args: argparse.Namespace) -> None:
     x = embed_image_paths(frame_paths, embedder, batch_size=args.batch_size, cache_dir=embedding_cache)
 
     classifier = model_payload["classifier"]
-    proba = classifier.predict_proba(x)[:, 1]  # type: ignore[attr-defined]
+    proba = align_probabilities(classifier, classifier.predict_proba(x), class_names)  # type: ignore[attr-defined]
+    filter_score = proba[:, filter_indices].sum(axis=1) if filter_indices else np.zeros(proba.shape[0], dtype=np.float32)
     times = [float(item["time"]) for item in records]
     frame_step = 1.0 / args.fps if args.fps > 0 else None
-    smoothed, segments = build_filter_segments(
+    smoothed_filter, segments = build_filter_segments(
         times=times,
-        probabilities=proba,
+        probabilities=filter_score,
         threshold=threshold,
         window=args.smoothing_window,
         method=args.smoothing_method,
@@ -119,21 +159,42 @@ def predict(args: argparse.Namespace) -> None:
         min_duration=args.min_segment_duration,
         frame_step=frame_step,
     )
+    smoothed_by_class: dict[str, np.ndarray] = {}
+    segments_by_class: dict[str, list[dict[str, float]]] = {}
+    for class_index, class_name in enumerate(class_names):
+        smoothed_class, class_segments = build_filter_segments(
+            times=times,
+            probabilities=proba[:, class_index],
+            threshold=threshold,
+            window=args.smoothing_window,
+            method=args.smoothing_method,
+            merge_gap=args.merge_gap,
+            min_duration=args.min_segment_duration,
+            frame_step=frame_step,
+        )
+        smoothed_by_class[class_name] = smoothed_class
+        segments_by_class[class_name] = [segment.to_dict() for segment in class_segments]
 
     predictions: list[dict[str, object]] = []
-    for item, prob, smooth_prob in zip(records, proba, smoothed):
-        raw_pred = int(float(prob) >= threshold)
-        smooth_pred = int(float(smooth_prob) >= threshold)
-        predictions.append(
-            {
-                **item,
-                "prob_footage": round(float(1.0 - prob), 6),
-                "prob_graphic": round(float(prob), 6),
-                "pred": raw_pred,
-                "smoothed_prob_graphic": round(float(smooth_prob), 6),
-                "smoothed_pred": smooth_pred,
-            }
-        )
+    smoothed_matrix = np.column_stack([smoothed_by_class[name] for name in class_names])
+    for item, probs, smooth_probs, score, smooth_score in zip(records, proba, smoothed_matrix, filter_score, smoothed_filter):
+        raw_pred = int(np.argmax(probs))
+        smooth_pred = int(np.argmax(smooth_probs))
+        row: dict[str, object] = {
+            **item,
+            "pred": raw_pred,
+            "pred_label": class_names[raw_pred],
+            "smoothed_pred": smooth_pred,
+            "smoothed_pred_label": class_names[smooth_pred],
+            "filter_score": round(float(score), 6),
+            "smoothed_filter_score": round(float(smooth_score), 6),
+            "filter_pred": int(float(score) >= threshold),
+            "smoothed_filter_pred": int(float(smooth_score) >= threshold),
+        }
+        for class_index, class_name in enumerate(class_names):
+            row[f"prob_{class_name}"] = round(float(probs[class_index]), 6)
+            row[f"smoothed_prob_{class_name}"] = round(float(smooth_probs[class_index]), 6)
+        predictions.append(row)
 
     output = {
         "video": str(video_path.resolve()),
@@ -142,6 +203,8 @@ def predict(args: argparse.Namespace) -> None:
         "sample_every_n": args.sample_every_n,
         "crop_bottom": crop_bottom,
         "threshold": threshold,
+        "class_names": class_names,
+        "filter_class_names": [class_names[index] for index in filter_indices],
         "backbones": {"dino": dino_model, "clip": clip_model},
         "smoothing": {
             "method": args.smoothing_method,
@@ -149,7 +212,8 @@ def predict(args: argparse.Namespace) -> None:
             "merge_gap": args.merge_gap,
             "min_segment_duration": args.min_segment_duration,
         },
-        "segments_graphic": [segment.to_dict() for segment in segments],
+        "segments_filter": [segment.to_dict() for segment in segments],
+        "segments_by_class": segments_by_class,
         "predictions": predictions,
     }
     write_json(output, args.out)
@@ -171,7 +235,7 @@ def predict(args: argparse.Namespace) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Predict footage vs graphic probabilities for a video.")
+    parser = argparse.ArgumentParser(description="Predict footage, graphic and mixture probabilities for a video.")
     parser.add_argument("--video", required=True)
     parser.add_argument("--model", required=True)
     parser.add_argument("--out", required=True)

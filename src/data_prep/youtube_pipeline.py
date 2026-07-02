@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import math
 import os
+import random
 import shutil
 import subprocess
 import sys
@@ -140,9 +141,16 @@ def chunks(items: list[str], size: int) -> list[list[str]]:
     return [items[index : index + size] for index in range(0, len(items), size)]
 
 
-def fetch_videos(channel: str, limit: int | None = None) -> list[dict]:
+def fetch_videos(channel: str, limit: int | None = None, random_sample: bool = False, seed: int | None = None) -> list[dict]:
+    video_id_list = playlist_video_ids(channel, limit=None if random_sample else limit)
+    if random_sample and limit is not None and len(video_id_list) > limit:
+        rng = random.Random(seed)
+        video_id_list = rng.sample(video_id_list, limit)
+    elif limit is not None:
+        video_id_list = video_id_list[:limit]
+
     videos: list[dict] = []
-    for video_ids in chunks(playlist_video_ids(channel, limit=limit), 50):
+    for video_ids in chunks(video_id_list, 50):
         data = youtube(
             "videos",
             part="snippet,contentDetails,statistics",
@@ -150,7 +158,7 @@ def fetch_videos(channel: str, limit: int | None = None) -> list[dict]:
             maxResults=50,
         )
         videos += data.get("items", [])
-    return videos[:limit] if limit is not None else videos
+    return videos
 
 
 def fetch_video(video_url: str) -> list[dict]:

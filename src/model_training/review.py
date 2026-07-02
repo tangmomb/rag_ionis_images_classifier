@@ -10,10 +10,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from utils import ensure_dir, read_json, write_json
 
 
+LABEL_MAPPING = {"footage": 0, "graphic": 1, "mixture": 2}
+FILTER_LABELS = {LABEL_MAPPING["graphic"], LABEL_MAPPING["mixture"]}
+
+
 def _coerce_label(value: Any) -> int | None:
     if isinstance(value, bool):
         return int(value)
-    if isinstance(value, (int, float)) and int(value) in (0, 1):
+    if isinstance(value, (int, float)) and int(value) in set(LABEL_MAPPING.values()):
         return int(value)
     if isinstance(value, str):
         normalized = value.strip().lower()
@@ -21,6 +25,8 @@ def _coerce_label(value: Any) -> int | None:
             return 0
         if normalized in {"1", "graphic", "filter", "filtered"}:
             return 1
+        if normalized in {"2", "mixture", "mixed", "mix"}:
+            return 2
     return None
 
 
@@ -72,19 +78,42 @@ def export_review_frames(
     labels = labels or []
     selected: list[tuple[str, dict[str, Any]]] = []
 
+    def class_probabilities(item: dict[str, Any]) -> list[float]:
+        values = []
+        for class_name in LABEL_MAPPING:
+            key = f"prob_{class_name}"
+            if key in item:
+                values.append(float(item[key]))
+        if values:
+            return values
+        prob = float(item.get("prob_graphic", item.get("prob_filter", 0.0)))
+        return [1.0 - prob, prob]
+
+    def uncertainty_score(item: dict[str, Any]) -> float:
+        probs = sorted(class_probabilities(item), reverse=True)
+        if not probs:
+            return 1.0
+        if len(probs) == 1:
+            return 1.0 - probs[0]
+        return probs[0] - probs[1]
+
     ranked = sorted(
         predictions,
-        key=lambda item: abs(float(item.get("prob_graphic", item.get("prob_filter", 0.0))) - threshold),
+        key=uncertainty_score,
     )
     for item in ranked:
-        prob = float(item.get("prob_graphic", item.get("prob_filter", 0.0)))
-        if abs(prob - threshold) <= uncertain_margin or len(selected) < top_k:
+        confidence = max(class_probabilities(item))
+        margin_or_uncertainty = uncertainty_score(item)
+        filter_score = float(item.get("filter_score", item.get("prob_graphic", item.get("prob_filter", 0.0))))
+        near_filter_threshold = abs(filter_score - threshold) <= uncertain_margin
+        if confidence <= 1.0 - uncertain_margin or margin_or_uncertainty <= uncertain_margin or near_filter_threshold or len(selected) < top_k:
             selected.append(("uncertain", item))
         if len([entry for entry in selected if entry[0] == "uncertain"]) >= top_k:
             break
 
     false_positive = 0
     false_negative = 0
+    wrong_class = 0
     if labels:
         for item in predictions:
             time_sec = float(item.get("time", 0.0))
@@ -92,10 +121,15 @@ def export_review_frames(
             if label is None:
                 continue
             pred = int(item.get("smoothed_pred", item.get("pred", 0)))
-            if pred == 1 and label == 0:
+            if pred != label:
+                selected.append(("wrong_class", item))
+                wrong_class += 1
+            pred_filter = pred in FILTER_LABELS
+            label_filter = label in FILTER_LABELS
+            if pred_filter and not label_filter:
                 selected.append(("false_positive", item))
                 false_positive += 1
-            elif pred == 0 and label == 1:
+            elif not pred_filter and label_filter:
                 selected.append(("false_negative", item))
                 false_negative += 1
 
@@ -113,7 +147,7 @@ def export_review_frames(
             continue
         seen.add(key)
         category_dir = ensure_dir(out_root / category)
-        prob = float(item.get("prob_graphic", item.get("prob_filter", 0.0)))
+        prob = float(item.get("filter_score", item.get("prob_graphic", item.get("prob_filter", 0.0))))
         time_sec = float(item.get("time", 0.0))
         target = category_dir / f"t{time_sec:010.3f}_p{prob:.3f}_{source.name}"
         shutil.copy2(source, target)
@@ -127,6 +161,7 @@ def export_review_frames(
         "count": len(manifest),
         "false_positive": false_positive,
         "false_negative": false_negative,
+        "wrong_class": wrong_class,
         "items": manifest,
     }
     write_json(summary, out_root / "manifest.json")

@@ -42,7 +42,11 @@ def main() -> None:
         label_tolerance=args.label_tolerance,
     )
     print(f"Exported {summary['count']} review frames to {summary['out_dir']}")
-    print(f"False positives: {summary['false_positive']}, false negatives: {summary['false_negative']}")
+    print(
+        f"False positives: {summary['false_positive']}, "
+        f"false negatives: {summary['false_negative']}, "
+        f"wrong class: {summary.get('wrong_class', 0)}"
+    )
 
 
 if __name__ == "__main__":

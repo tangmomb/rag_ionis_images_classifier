@@ -61,6 +61,17 @@ def clear_file(path: str | Path, dry_run: bool = False) -> None:
         target.unlink()
 
 
+def remove_path(path: str | Path, dry_run: bool = False) -> None:
+    target = ensure_inside_workspace(Path(path))
+    print(f"[clean] {target}")
+    if dry_run or not target.exists():
+        return
+    if target.is_dir():
+        shutil.rmtree(target)
+    else:
+        target.unlink()
+
+
 def clean_pipeline_outputs(args: argparse.Namespace) -> None:
     print("\n=== clean previous run ===")
     clear_file(args.video_list, dry_run=args.dry_run)
@@ -69,6 +80,7 @@ def clean_pipeline_outputs(args: argparse.Namespace) -> None:
     clear_directory(args.clusters_out, dry_run=args.dry_run)
     clear_directory(Path(args.labels_dir) / "footage", dry_run=args.dry_run)
     clear_directory(Path(args.labels_dir) / "graphic", dry_run=args.dry_run)
+    remove_path(Path(args.labels_dir) / "mixture", dry_run=args.dry_run)
 
 
 def parse_args() -> argparse.Namespace:
@@ -81,6 +93,8 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument("--channel", default=DEFAULT_CHANNEL, help=f"YouTube channel URL, handle, or channel ID. Default: {DEFAULT_CHANNEL}")
     parser.add_argument("--video-list", default=str(DEFAULT_VIDEO_LIST), help="TSV file used between step 01 and step 02.")
+    parser.add_argument("--seed", type=int, default=None, help="Optional random seed for reproducible video sampling.")
+    parser.add_argument("--sequential", action="store_true", help="With --limit, take videos in channel order instead of random sampling.")
     parser.add_argument("--raw-video-dir", default=str(DEFAULT_RAW_VIDEO_DIR))
     parser.add_argument("--frames-dir", default=str(DEFAULT_EXTRACTED_FRAMES_DIR), help="Temporary extracted frames directory before sorting.")
     parser.add_argument("--clusters-out", default=str(DEFAULT_CLUSTERS_OUT))
@@ -175,6 +189,10 @@ def main() -> None:
             command += ["--channel", args.channel]
             if args.limit is not None:
                 command += ["--limit", str(args.limit)]
+                if not args.sequential:
+                    command.append("--random-sample")
+                if args.seed is not None:
+                    command += ["--seed", str(args.seed)]
         run_step("01 fetch YouTube list", command, dry_run=args.dry_run)
 
     if not args.skip_download:

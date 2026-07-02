@@ -73,7 +73,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out", required=True, help="Output frames directory.")
     parser.add_argument("--fps", type=float, default=1.0, help="Target extraction FPS.")
     parser.add_argument("--sample-every-n", type=int, default=1, help="Keep one extracted frame every N samples.")
-    parser.add_argument("--class-dir", choices=["footage", "graphic"], default=None, help="Optional label directory.")
+    parser.add_argument("--class-dir", choices=["footage", "graphic", "mixture"], default=None, help="Optional label directory.")
     parser.add_argument("--jpeg-quality", type=int, default=95, help="JPEG quality.")
     return parser.parse_args()
 

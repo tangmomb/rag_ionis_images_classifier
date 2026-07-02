@@ -11,6 +11,7 @@ class TorchMLPClassifier:
         self,
         input_dim: int | None = None,
         hidden_dim: int = 256,
+        num_classes: int = 2,
         epochs: int = 25,
         batch_size: int = 64,
         lr: float = 1e-3,
@@ -20,6 +21,7 @@ class TorchMLPClassifier:
     ) -> None:
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
+        self.num_classes = num_classes
         self.epochs = epochs
         self.batch_size = batch_size
         self.lr = lr
@@ -27,26 +29,29 @@ class TorchMLPClassifier:
         self.device = device
         self.random_state = random_state
         self.model: torch.nn.Module | None = None
+        self.classes_: np.ndarray | None = None
 
     def _build(self, input_dim: int) -> torch.nn.Module:
         return torch.nn.Sequential(
             torch.nn.Linear(input_dim, self.hidden_dim),
             torch.nn.ReLU(),
             torch.nn.Dropout(0.20),
-            torch.nn.Linear(self.hidden_dim, 1),
+            torch.nn.Linear(self.hidden_dim, self.num_classes),
         )
 
     def fit(self, x: np.ndarray, y: np.ndarray) -> "TorchMLPClassifier":
         torch.manual_seed(self.random_state)
         self.input_dim = int(x.shape[1])
+        self.classes_ = np.asarray(sorted(set(int(value) for value in y.tolist())), dtype=np.int64)
+        self.num_classes = int(max(int(self.classes_.max()) + 1, len(self.classes_)))
         self.model = self._build(self.input_dim).to(self.device)
 
         x_tensor = torch.tensor(x, dtype=torch.float32)
-        y_tensor = torch.tensor(y.reshape(-1, 1), dtype=torch.float32)
-        positives = max(float(np.sum(y == 1)), 1.0)
-        negatives = max(float(np.sum(y == 0)), 1.0)
-        pos_weight = torch.tensor([negatives / positives], dtype=torch.float32, device=self.device)
-        criterion = torch.nn.BCEWithLogitsLoss(pos_weight=pos_weight)
+        y_tensor = torch.tensor(y, dtype=torch.long)
+        counts = np.bincount(y.astype(np.int64), minlength=self.num_classes).astype(np.float32)
+        counts = np.maximum(counts, 1.0)
+        weights = counts.sum() / (counts * self.num_classes)
+        criterion = torch.nn.CrossEntropyLoss(weight=torch.tensor(weights, dtype=torch.float32, device=self.device))
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.lr)
         dataset = torch.utils.data.TensorDataset(x_tensor, y_tensor)
         loader = torch.utils.data.DataLoader(dataset, batch_size=self.batch_size, shuffle=True)
@@ -69,12 +74,12 @@ class TorchMLPClassifier:
             raise RuntimeError("MLP classifier is not fitted")
         with torch.inference_mode():
             xb = torch.tensor(x, dtype=torch.float32, device=self.device)
-            logits = self.model(xb).detach().cpu().numpy().reshape(-1)
-            probs_filter = 1.0 / (1.0 + np.exp(-logits))
-        return np.column_stack([1.0 - probs_filter, probs_filter])
+            logits = self.model(xb).detach().cpu()
+            probs = torch.softmax(logits, dim=1).numpy()
+        return probs
 
     def predict(self, x: np.ndarray) -> np.ndarray:
-        return (self.predict_proba(x)[:, 1] >= self.threshold).astype(int)
+        return np.argmax(self.predict_proba(x), axis=1).astype(int)
 
     def __getstate__(self) -> dict[str, Any]:
         state = self.__dict__.copy()

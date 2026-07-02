@@ -4,9 +4,11 @@ Projet Python pour entrainer et utiliser un detecteur de frames a filtrer:
 
 - `0` / `footage`: contenu filme a garder
 - `1` / `graphic`: ajout graphique ou montage a filtrer
+- `2` / `mixture`: frame ambigue ou mixte, par exemple contenu filme avec forte couche graphique
 
 Exemples `graphic`: intro/outro, carton titre, logo centre, fond graphique, slide generee au montage.  
 Exemples `footage`: logo filme sur ecran, slide filmee, personne, salle, batiment, contenu camera.
+Exemples `mixture`: slide filmee avec overlay genere, personne sur fond graphique, plateau filme avec habillage montage dominant.
 
 ## Installation
 
@@ -33,6 +35,7 @@ data/
     corrected_sort/
       footage/
       graphic/
+      mixture/
 models/
 outputs/
   video_urls.txt
@@ -65,7 +68,7 @@ python src/data_prep/run_pipeline.py --limit 20 --fps 1 --clusters 8
 ```
 
 Ce pipeline execute les etapes `01` a `04`: liste YouTube via API officielle, telechargement, extraction ffmpeg, puis clustering des frames.
-Si vous lancez `run_pipeline.py` sans `--limit`, `--all` ou `--video-url`, il pose une seule question: tapez `all`, un nombre de videos, ou un lien YouTube precis. Il demande ensuite le nombre de clusters prealables si `--clusters` n'est pas fourni.
+Si vous lancez `run_pipeline.py` sans `--limit`, `--all` ou `--video-url`, il pose une seule question: tapez `all`, un nombre de videos, ou un lien YouTube precis. Quand vous donnez un nombre, les videos sont tirees au hasard dans la chaine, pas prises dans l'ordre. Il demande ensuite le nombre de clusters prealables si `--clusters` n'est pas fourni.
 Par defaut, chaque lancement efface le run precedent et repart de zero:
 
 ```text
@@ -83,7 +86,9 @@ Options utiles:
 python src/data_prep/run_pipeline.py --all --fps 1 --clusters 8
 python src/data_prep/run_pipeline.py --video-url https://www.youtube.com/watch?v=VIDEO_ID --fps 1 --clusters 8
 python src/data_prep/run_pipeline.py --limit 20 --cluster-copy-mode hardlink --cluster-sample-every-n 2
-python src/data_prep/run_pipeline.py --limit 20 --cluster-mixed-target graphic
+python src/data_prep/run_pipeline.py --limit 20 --seed 42
+python src/data_prep/run_pipeline.py --limit 20 --sequential
+python src/data_prep/run_pipeline.py --limit 20 --cluster-mixed-target footage
 python src/data_prep/run_pipeline.py --limit 20 --no-apply-labels
 python src/data_prep/run_pipeline.py --limit 20 --no-clean
 python src/data_prep/run_pipeline.py --skip-fetch --skip-download --fps 1 --clusters 12
@@ -160,14 +165,14 @@ outputs/clusters/<video_id>/
 
 Chaque cluster contient aussi un `contact_sheet.jpg` et un `manifest.json`.
 
-Ensuite, par defaut, il deplace les frames sources vers:
+Ensuite, par defaut, le premier tri reste binaire et deplace les frames sources vers:
 
 ```text
 data/frames/initial_sort_via_script/footage/
 data/frames/initial_sort_via_script/graphic/
 ```
 
-Les clusters `mixed` sont envoyes dans `footage` par defaut. Vous pouvez changer ce comportement:
+Les clusters `mixed`, donc les choix difficiles du tri automatique, sont envoyes dans `footage` par defaut. La classe `mixture` est reservee au tri corrige manuel dans `corrected_sort`.
 
 Options utiles:
 
@@ -184,6 +189,7 @@ Verifiez ensuite le premier tri et copiez/deplacez les images corrigees dans les
 ```text
 data/frames/corrected_sort/footage/
 data/frames/corrected_sort/graphic/
+data/frames/corrected_sort/mixture/
 ```
 
 ### 7. Entrainer
@@ -212,6 +218,7 @@ python src/model_training/extract_frames.py --videos chemin/vers/videos --out da
 
 Le bas de l'image est ignore par defaut a `20%` pour reduire l'effet des sous-titres.
 Le dossier d'entrainement par defaut est `data/frames/corrected_sort`.
+La validation est separee par video par defaut: toutes les frames d'une meme video restent soit dans train, soit dans validation. Cela evite des scores trop optimistes quand beaucoup d'images consecutives se ressemblent.
 
 ```powershell
 python src/model_training/train.py --data data/frames/corrected_sort --model-out models/frame_filter.joblib --crop-bottom 0.20
@@ -226,10 +233,16 @@ Le modele sauvegarde contient:
 - le seuil recommande
 - les metadonnees d'entrainement
 
-Le classifieur par defaut est `LogisticRegression` avec ponderation de classe pour favoriser le rappel de `graphic`. Un MLP PyTorch est aussi disponible:
+Le classifieur par defaut est `LogisticRegression` avec ponderation de classe pour favoriser le rappel de `graphic` et `mixture`. Un MLP PyTorch est aussi disponible:
 
 ```powershell
 python src/model_training/train.py --data data/frames/corrected_sort --classifier mlp --epochs 30 --batch-size 32
+```
+
+Pour un test rapide non representatif, vous pouvez revenir a un split aleatoire par image:
+
+```powershell
+python src/model_training/train.py --split-mode image
 ```
 
 ### Predire sur une video
@@ -244,7 +257,7 @@ Options utiles:
 python src/model_training/predict_video.py --video input.mp4 --model models/frame_filter.joblib --out outputs/predictions.json --fps 2 --threshold 0.45 --smoothing-window 9 --min-segment-duration 1.0 --merge-gap 0.75 --device cuda
 ```
 
-Le JSON contient les predictions par frame, les predictions lissees et les segments temporels a filtrer.
+Le JSON contient les probabilites `footage`, `graphic` et `mixture` par frame, les predictions lissees, `segments_filter` pour `graphic + mixture`, et `segments_by_class`.
 
 ## Hard-negative mining / review
 
@@ -269,13 +282,13 @@ python src/model_training/export_review_frames.py --predictions outputs/predicti
 Formats de labels acceptes:
 
 ```json
-{"video_name": {"12.5": 1, "18.0": 0}}
+{"video_name": {"12.5": 1, "18.0": 0, "22.0": 2}}
 ```
 
 ou:
 
 ```json
-[{"time": 12.5, "label": 1}, {"time": 18.0, "label": 0}]
+[{"time": 12.5, "label": 1}, {"time": 18.0, "label": 0}, {"time": 22.0, "label": 2}]
 ```
 
 ## Notes pratiques
@@ -284,5 +297,5 @@ ou:
 - CUDA est utilise si disponible, sinon CPU.
 - Les embeddings d'images annotees sont caches dans `data/frames/.embedding_cache/`.
 - Les embeddings de frames temporaires de prediction sont caches dans `outputs/cache/`.
-- Augmentez le rappel `graphic` en baissant `--threshold` ou en entrainant avec plus d'exemples difficiles.
+- Augmentez le rappel de filtrage `graphic + mixture` en baissant `--threshold` ou en entrainant avec plus d'exemples difficiles.
 - Pour eviter les faux positifs isoles, utilisez le lissage temporel, `--min-segment-duration` et `--merge-gap`.
