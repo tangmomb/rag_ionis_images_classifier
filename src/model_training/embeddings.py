@@ -26,7 +26,7 @@ DEFAULT_CLIP_MODEL = "openai/clip-vit-base-patch32"
 class EmbeddingConfig:
     dino_model: str = DEFAULT_DINO_MODEL
     clip_model: str = DEFAULT_CLIP_MODEL
-    crop_bottom: float = 0.20
+    crop_bottom: float = 0.0
 
     def to_dict(self) -> dict[str, str | float]:
         return {
@@ -104,7 +104,7 @@ class FrozenBackboneEmbedder:
 def cache_path_for_image(image_path: Path, cache_dir: Path, config: EmbeddingConfig) -> Path:
     signature = stable_hash(
         [
-            "frame-filter-embedding-v1",
+            "image-classifier-embedding-v1",
             file_signature(image_path),
             config.to_dict(),
         ]
@@ -136,7 +136,7 @@ def embed_image_paths(
 
     iterator = range(0, len(missing_indices), batch_size)
     if show_progress:
-        iterator = tqdm(iterator, desc="Embedding frames", unit="batch")  # type: ignore[assignment]
+        iterator = tqdm(iterator, desc="Embedding images", unit="batch")  # type: ignore[assignment]
 
     for start in iterator:
         batch_indices = missing_indices[start : start + batch_size]
@@ -160,7 +160,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out", required=True, help="Output .npy file.")
     parser.add_argument("--cache-dir", default=None, help="Optional embedding cache directory.")
     parser.add_argument("--batch-size", type=int, default=16)
-    parser.add_argument("--crop-bottom", type=float, default=0.20)
+    parser.add_argument("--crop-bottom", type=float, default=0.0)
     parser.add_argument("--device", default=None, help="cuda, cpu, or auto if omitted.")
     parser.add_argument("--dino-model", default=DEFAULT_DINO_MODEL)
     parser.add_argument("--clip-model", default=DEFAULT_CLIP_MODEL)

@@ -16,7 +16,6 @@ class TorchMLPClassifier(ClassifierMixin, BaseEstimator):
         epochs: int = 25,
         batch_size: int = 64,
         lr: float = 1e-3,
-        threshold: float = 0.5,
         device: str = "cpu",
         random_state: int = 42,
     ) -> None:
@@ -26,7 +25,6 @@ class TorchMLPClassifier(ClassifierMixin, BaseEstimator):
         self.epochs = epochs
         self.batch_size = batch_size
         self.lr = lr
-        self.threshold = threshold
         self.device = device
         self.random_state = random_state
         self.model: torch.nn.Module | None = None
