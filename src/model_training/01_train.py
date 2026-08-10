@@ -130,7 +130,7 @@ def resolve_model_out(model_out: str | None) -> Path:
     if model_out:
         return Path(model_out)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    return Path("models") / f"image_classifier_{timestamp}.joblib"
+    return Path("models") / f"frame_filter_{timestamp}.joblib"
 
 
 def train(args: argparse.Namespace) -> None:
@@ -236,7 +236,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model-out",
         default=None,
-        help="Output model path. Default: models/image_classifier_YYYY-MM-DD_HH-MM-SS.joblib",
+        help="Output model path. Default: models/frame_filter_YYYY-MM-DD_HH-MM-SS.joblib",
     )
     parser.add_argument("--crop-bottom", type=float, default=0.0)
     parser.add_argument("--batch-size", type=int, default=16)
