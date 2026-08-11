@@ -90,8 +90,14 @@ def split_dataset(
     return train_idx, val_idx, test_idx
 
 
-def print_metrics(y_true: np.ndarray, probabilities: np.ndarray) -> dict[str, Any]:
+def print_metrics(
+    y_true: np.ndarray,
+    probabilities: np.ndarray,
+    image_paths: list[Path],
+) -> dict[str, Any]:
     predictions = np.argmax(probabilities, axis=1)
+    if len(image_paths) != len(y_true):
+        raise ValueError("image_paths and y_true must contain the same number of items")
     metrics = {
         "accuracy": float(accuracy_score(y_true, predictions)),
         "precision_macro": float(precision_score(y_true, predictions, average="macro", zero_division=0)),
@@ -118,6 +124,16 @@ def print_metrics(y_true: np.ndarray, probabilities: np.ndarray) -> dict[str, An
             zero_division=0,
         )
     )
+    misclassified_indices = np.flatnonzero(predictions != y_true)
+    print(f"Misclassified images: {len(misclassified_indices)}")
+    for index in misclassified_indices:
+        true_label = CLASS_NAMES[int(y_true[index])]
+        predicted_label = CLASS_NAMES[int(predictions[index])]
+        confidence = float(probabilities[index, predictions[index]])
+        print(
+            f"- {image_paths[index].as_posix()} | true={true_label} | "
+            f"predicted={predicted_label} | confidence={confidence:.4f}"
+        )
     return metrics
 
 
@@ -186,9 +202,11 @@ def train(args: argparse.Namespace) -> None:
     model.fit(x_train, y_train)
 
     print("\nValidation metrics")
-    val_metrics = print_metrics(y_val, model.predict_proba(x_val))
+    val_paths = [paths[index] for index in val_idx]
+    val_metrics = print_metrics(y_val, model.predict_proba(x_val), val_paths)
     print("\nTest metrics")
-    test_metrics = print_metrics(y_test, model.predict_proba(x_test))
+    test_paths = [paths[index] for index in test_idx]
+    test_metrics = print_metrics(y_test, model.predict_proba(x_test), test_paths)
 
     model_out = resolve_model_out(args.model_out)
     payload = {

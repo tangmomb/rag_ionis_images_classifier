@@ -1,0 +1,56 @@
+Training log: models\frame_filter_2026-08-11_12-07-52.log
+Dataset: E:\cooking\rag_ionis_images_classifier\data\frames\dataset
+Class counts: {'footage': 368, 'graphic': 224, 'mixture': 66}
+Split: train=526 | validation=66 | test=66
+Using device: cuda
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|##########| 223/223 [00:00<00:00, 7257.20it/s]
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|##########| 398/398 [00:00<00:00, 21179.86it/s]
+Embedding images: 0batch [00:00, ?batch/s]Embedding images: 0batch [00:00, ?batch/s]
+
+Validation metrics
+Accuracy:        1.0000
+Precision macro: 1.0000
+Recall macro:    1.0000
+F1 macro:        1.0000
+Confusion matrix rows=true cols=pred, classes=['footage', 'graphic', 'mixture']:
+[[37  0  0]
+ [ 0 22  0]
+ [ 0  0  7]]
+              precision    recall  f1-score   support
+
+     footage       1.00      1.00      1.00        37
+     graphic       1.00      1.00      1.00        22
+     mixture       1.00      1.00      1.00         7
+
+    accuracy                           1.00        66
+   macro avg       1.00      1.00      1.00        66
+weighted avg       1.00      1.00      1.00        66
+
+Misclassified images: 0
+
+Test metrics
+Accuracy:        0.9242
+Precision macro: 0.8709
+Recall macro:    0.9041
+F1 macro:        0.8828
+Confusion matrix rows=true cols=pred, classes=['footage', 'graphic', 'mixture']:
+[[35  0  2]
+ [ 1 20  1]
+ [ 1  0  6]]
+              precision    recall  f1-score   support
+
+     footage       0.95      0.95      0.95        37
+     graphic       1.00      0.91      0.95        22
+     mixture       0.67      0.86      0.75         7
+
+    accuracy                           0.92        66
+   macro avg       0.87      0.90      0.88        66
+weighted avg       0.93      0.92      0.93        66
+
+Misclassified images: 5
+- data/frames/dataset/graphic/MFa3-1BnoDM__02_17.jpg | true=graphic | predicted=footage | confidence=0.9133
+- data/frames/dataset/footage/ZRXy0v1WaQI__00_01.jpg | true=footage | predicted=mixture | confidence=0.5201
+- data/frames/dataset/graphic/c8E1bXfoAaM__00_05.jpg | true=graphic | predicted=mixture | confidence=0.7938
+- data/frames/dataset/footage/MsxTsc2uAvw__00_19.jpg | true=footage | predicted=mixture | confidence=0.9830
+- data/frames/dataset/mixture/ZRXy0v1WaQI__00_25.jpg | true=mixture | predicted=footage | confidence=0.8455
+Saved model to models\frame_filter_2026-08-11_12-07-52.joblib
